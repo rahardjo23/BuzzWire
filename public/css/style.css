@@ -1,0 +1,571 @@
+
+.navbar {
+    background-color: #212121;
+}
+
+.navbar-brand {
+    font-size: 28px;
+    font-weight: bold;
+    color: white !important;
+    padding-left: 15px;
+}
+
+.search-box {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    width: 400px;
+    max-width: 450px;
+}
+
+.nav-links {
+    border-top: 1px solid #333;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #212121;
+}
+
+.nav-links .nav-link {
+    color: white !important;
+    padding: 8px 15px;
+}
+
+.publish-btn {
+    background-color: #212121;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 4px;
+    padding: 8px 15px;
+}
+
+.user-menu-button {
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Slight white/gray border with transparency */
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+/* Optional hover effect */
+.user-menu-button:hover {
+    border-color: rgba(255, 255, 255, 0.5); /* Slightly more visible on hover */
+}
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+/* === Base Styles === */
+body {
+font-family: Arial, sans-serif;
+background-color: #f8f9fa;
+}
+
+.content-container {
+padding: 30px 0;
+}
+
+/* === Author Info (News Article) === */
+.author-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0 5px; /* Additional padding specifically for author info */
+}
+
+.author-avatar {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+margin-right: 15px;
+}
+
+.author-name {
+font-weight: bold;
+margin-bottom: 0;
+}
+
+.author-title {
+color: #6c757d;
+font-size: 14px;
+}
+
+/* === Main Article === */
+.main-article {
+margin-bottom: 30px;
+padding: 0 5px;
+}
+
+.main-article h1 {
+font-size: 30px;
+font-weight: bold;
+margin-bottom: 15px;
+}
+
+
+
+.category-tag {
+color: #f97316;
+font-weight: 500;
+
+display: inline-block;
+}
+
+.category-tag1 {
+    color: #f97316;
+    margin-bottom: 10px;
+    font-weight: 500;       
+}
+
+/* === Main Article Image === */
+.article-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+/* === Side Articles === */
+/* Elegant Article Link Styling for Sidebar Articles */
+.side-article-link {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.5s ease;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 16px;
+}
+
+.side-article-link:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    background-color: #fafafa;
+}
+
+/* Content area styling */
+.side-article-content {
+    flex: 1;
+    padding-right: 15px;
+    position: relative;
+}
+
+/* Title styling */
+.side-article-content h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+    line-height: 1.3;
+}
+
+.side-article-link:hover .side-article-content h2 {
+    color: #333;
+}
+
+/* Article summary styling */
+.article-summary {
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 15px;
+    transition: color 0.3s ease;
+}
+
+.side-article-link:hover .article-summary {
+    color: #495057;
+}
+
+/* Category tag styling */
+.side-article-content .category-tag {
+    color: #f97316;
+    font-weight: 500;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Elegant underline effect for category */
+.side-article-content .category-tag::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #f97316;
+    transition: width 0.3s ease;
+}
+
+.side-article-link:hover .category-tag::after {
+    width: 100%;
+}
+
+/* Image styling */
+.side-article-image {
+    width: 180px;
+    height: 110px;
+    border-radius: 6px;
+    object-fit: cover;
+    transition: all 0.7s ease;
+}
+
+.side-article-link:hover .side-article-image {
+    transform: scale(1.05);
+    filter: brightness(1.05);
+}
+
+/* Read more link with elegant animation */
+.read-more-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    font-size: 14px;
+    color: #212121;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.4s ease;
+}
+
+.side-article-link:hover .read-more-indicator {
+    opacity: 1;
+    transform: translateX(0);
+}
+.article-summary {
+color: #6c757d;
+font-size: 14px;
+margin-bottom: 10px;
+}
+
+/* === Featured Article Section === */
+.featured-article {
+position: relative;
+margin-bottom: 30px;
+border-radius: 10px;
+overflow: hidden;
+height: 270px;
+}
+
+.featured-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.featured-content {
+position: absolute;
+bottom: 0;
+left: 0;
+padding: 20px;
+color: white;
+background: linear-gradient(transparent, rgba(0,0,0,0.8));
+width: 100%;
+}
+
+.featured-content h2 {
+font-size: 24px;
+font-weight: bold;
+margin-bottom: 10px;
+}
+
+/* === Section Headers === */
+.section-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+margin-top: 20px;
+}
+
+.section-title {
+font-size: 26px;
+font-weight: bold;
+}
+
+.show-more {
+color: #f97316;
+text-decoration: none;
+font-weight: 500;
+}
+
+.show-more:hover {
+text-decoration: underline;
+color: #ea580c;
+}
+
+.show-more-icon {
+color: #f97316;
+font-size: 20px;
+}
+
+/* === Latest Article === */
+.latest-article {
+margin-bottom: 20px;
+}
+
+.latest-image {
+width: 100%;
+height: 160px;
+object-fit: cover;
+border-radius: 10px;
+margin-bottom: 10px;
+}
+
+.latest-article h3 {
+font-size: 16px;
+font-weight: bold;
+margin-bottom: 5px;
+}
+
+/* === Author Info (Small) === */
+.author-small {
+display: flex;
+align-items: center;
+margin-bottom: 5px;
+}
+
+.author-avatar-small {
+width: 24px;
+height: 24px;
+border-radius: 50%;
+margin-right: 8px;
+}
+
+.author-name-small {
+font-size: 14px;
+color: #333;
+}
+
+footer {
+    background-color: #212529;
+  }
+  
+  footer .social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  footer .social-icons a:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  footer .text-muted {
+    color: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  /* Elegant Article Link Styling */
+  .article-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.5s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    background-color: #fff;
+    padding: 20px; /* Add padding to the container */
+}
+
+/* Subtle elevation and refined shadow */
+.article-link:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Image styling */
+.image-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.latest-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: all 0.7s ease;
+}
+
+/* Elegant zoom effect */
+.article-link:hover .latest-image {
+    transform: scale(1.04);
+    filter: brightness(1.05);
+}
+
+/* Subtle overlay gradient */
+.image-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.1));
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.article-link:hover .image-container::after {
+    opacity: 1;
+}
+
+/* Content area styling */
+.article-content {
+    padding: 18px 16px;
+    transition: all 0.3s ease;
+}
+
+.article-link:hover .article-content {
+    background-color: #fafafa;
+}
+
+/* Article title styling */
+.article-link h3 {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    transition: color 0.3s ease;
+}
+
+.article-link:hover h3 {
+    color: #212121;
+}
+
+/* Category tag styling */
+.category-tag {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #f97316;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.article-link:hover .category-tag {
+    padding-left: 2px;
+}
+
+/* Elegant underline effect for category */
+.category-tag::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #f97316;
+    transition: width 0.3s ease;
+}
+
+.article-link:hover .category-tag::after {
+    width: 100%;
+}
+
+/* Author section styling */
+.author-small {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+.author-avatar-small {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 8px;
+    transition: all 0.3s ease;
+}
+
+.article-link:hover .author-avatar-small {
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+/* Read more link with elegant animation */
+.read-more-link {
+    margin-top: 12px;
+    overflow: hidden;
+    height: 24px;
+    display: block;
+}
+
+.read-more {
+    font-size: 14px;
+    font-weight: 500;
+    color: #212121;
+    position: relative;
+    padding-right: 22px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    display: inline-block;
+}
+
+.article-link:hover .read-more {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Arrow animation */
+.read-more::after {
+    content: '→';
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: transform 0.3s ease;
+}
+
+.article-link:hover .read-more::after {
+    transform: translateX(4px);
+}
+
+.featured-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-article {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-article:hover {
+    transform: translateY(-5px); /* lift up a bit */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* soft shadow */
+}
+
+.featured-image {
+    width: 100%;
+    height: auto;
+}
+
+.article-section-last{
+    margin-top: 20px;
+}
+
+.publish-button {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .publish-button:hover {
+    background-color: #2a2a2a;
+  }
+
+

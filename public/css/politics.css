@@ -1,0 +1,652 @@
+/* Politics Page Specific Styles */
+
+/* Politics Header Section */
+.politics-header {
+    padding: 40px 0;
+    background: linear-gradient(135deg, #212121 0%, #424242 100%);
+    color: white;
+    margin-bottom: 0;
+}
+
+.card1{
+   margin-bottom: 10px;
+}
+
+.politics-main-title {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+}
+
+.politics-subtitle {
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.9;
+    max-width: 540px;
+}
+
+.politics-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.politics-tag {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.politics-tag:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Featured Politics News */
+.featured-politics-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.5s ease;
+}
+
+.featured-politics {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    background-color: #fff;
+    transition: all 0.5s ease;
+}
+
+.featured-politics:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.featured-politics-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    transition: all 0.7s ease;
+}
+
+.featured-politics:hover .featured-politics-image {
+    transform: scale(1.04);
+    filter: brightness(1.05);
+}
+
+.featured-politics-content {
+    padding: 24px;
+}
+
+.politics-category-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f97316;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.featured-politics-content h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.featured-politics-summary {
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Politics Side Articles */
+.politics-side-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.politics-side-article {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.5s ease;
+}
+
+.politics-side-article:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    background-color: #fafafa;
+}
+
+.politics-side-content {
+    flex: 1;
+}
+
+.politics-side-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+.politics-side-article:hover h3 {
+    color: #212121;
+}
+
+.politics-timestamp {
+    display: flex;
+    align-items: center;
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.politics-time {
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.politics-side-article:hover .politics-time {
+    color: #495057;
+}
+
+/* Latest Politics Articles */
+.politics-card {
+    transition: all 0.5s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    height: 100%;
+}
+
+.politics-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Analysis & Opinion Section */
+.analysis-section {
+    padding: 40px 0;
+    background-color: #f8f9fa;
+}
+
+.analysis-featured-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.5s ease;
+}
+
+.analysis-featured {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.5s ease;
+}
+
+.analysis-featured:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.analysis-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.7s ease;
+}
+
+.analysis-featured:hover .analysis-image {
+    transform: scale(1.04);
+    filter: brightness(1.05);
+}
+
+.analysis-content {
+    padding: 24px;
+}
+
+.analysis-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f97316;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.analysis-content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.analysis-excerpt {
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.analysis-author {
+    display: flex;
+    align-items: center;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.author-avatar-small {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+/* Opinion Cards */
+.opinion-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.5s ease;
+    height: 100%;
+}
+
+.opinion-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    padding: 20px;
+    transition: all 0.5s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.opinion-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    background-color: #fafafa;
+}
+
+.opinion-header {
+    margin-bottom: 16px;
+}
+
+.opinion-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f97316;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+.opinion-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.opinion-author {
+    display: flex;
+    align-items: center;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.opinion-author-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+/* International Politics Section */
+.international-main-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.5s ease;
+}
+
+.international-main {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.5s ease;
+}
+
+.international-main:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.international-main-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    transition: all 0.7s ease;
+}
+
+.international-main:hover .international-main-img {
+    transform: scale(1.04);
+    filter: brightness(1.05);
+}
+
+.international-main-content {
+    padding: 24px;
+}
+
+.international-region-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f97316;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.international-main-content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.international-excerpt {
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* International List */
+.international-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.international-list-item {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.5s ease;
+}
+
+.international-list-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    background-color: #fafafa;
+}
+
+.international-list-item h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+.international-list-item:hover h4 {
+    color: #212121;
+}
+
+.international-item-footer {
+    display: flex;
+    align-items: center;
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.international-time {
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.international-list-item:hover .international-time {
+    color: #495057;
+}
+
+/* Leaders Profiles */
+.profiles-container {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.profiles-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #212121;
+}
+
+.leader-profile {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    padding: 12px 0;
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.leader-profile:last-child {
+    border-bottom: none;
+}
+
+.leader-profile:hover {
+    transform: translateX(4px);
+}
+
+.profile-image-container {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 16px;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.5s ease;
+}
+
+.leader-profile:hover .profile-image {
+    transform: scale(1.1);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.profile-position {
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.profile-read {
+    font-size: 14px;
+    color: #f97316;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.leader-profile:hover .profile-read {
+    color: #ea580c;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    padding: 60px 0;
+    background-color: #f8f9fa;
+}
+
+.newsletter-container {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    text-align: center;
+}
+
+.newsletter-content h3 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #212121;
+}
+
+.newsletter-content p {
+    color: #6c757d;
+    margin-bottom: 24px;
+    font-size: 16px;
+}
+
+.newsletter-form .form-control {
+    height: 48px;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid #e0e0e0;
+}
+
+.newsletter-btn {
+    background-color: #f97316;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.newsletter-btn:hover {
+    background-color: #ea580c;
+}
+
+.form-check-label {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .politics-main-title {
+        font-size: 36px;
+    }
+    
+    .featured-politics-image {
+        height: 300px;
+    }
+    
+    .international-main-img {
+        height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .politics-main-title {
+        font-size: 30px;
+    }
+    
+    .featured-politics-image {
+        height: 250px;
+    }
+    
+    .politics-tags {
+        justify-content: flex-start;
+        margin-top: 16px;
+    }
+    
+    .politics-side-container {
+        margin-top: 24px;
+    }
+    
+    .newsletter-container {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    .politics-header {
+        padding: 30px 0;
+    }
+    
+    .politics-main-title {
+        font-size: 26px;
+    }
+    
+    .politics-subtitle {
+        font-size: 14px;
+    }
+    
+    .featured-politics-image {
+        height: 200px;
+    }
+    
+    .featured-politics-content {
+        padding: 16px;
+    }
+    
+    .featured-politics-content h2 {
+        font-size: 20px;
+    }
+    
+    .politics-card {
+        margin-bottom: 16px;
+    }
+    
+    .newsletter-container {
+        padding: 20px;
+    }
+    
+    .newsletter-content h3 {
+        font-size: 22px;
+    }
+}
