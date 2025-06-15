@@ -2,71 +2,9 @@
 
 @section('title', 'Login')
 
-@section('content')
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-white border-0 pt-4">
-                    <h3 class="text-center">Log in to BuzzWire</h3>
-                </div>
-                <div class="card-body p-4">
-                    <!-- Social Login Buttons -->
-                    <button class="btn btn-social w-100 mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
-                            <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
-                        </svg>
-                        <span class="ms-2">Continue with Google</span>
-                    </button>
-                    
-                    <button class="btn btn-social w-100 mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
-                        </svg>
-                        <span class="ms-2">Continue with Facebook</span>
-                    </button>
-                    
-                    <div class="login-divider">
-                        <span>or</span>
-                    </div>
-                    
-                    <!-- Email Password Login Form -->
-                    <form class="login-form" method="POST" action="{{ route('login') }}">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="Enter your email" required>
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Enter your password" required>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                            <label class="form-check-label" for="remember">Remember me</label>
-                            <a href="#" class="float-end">Forgot password?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 py-2">Log In</button>
-                    </form>
-                    
-                    <div class="text-center mt-4">
-                        Don't have an account? <a href="{{ route('register') }}">Sign up</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
-
 @section('styles')
 <style>
+    /* Add any additional styles here that are relevant from welcome.blade.php */
     .btn-social {
         background-color: white;
         border: 1px solid #e0e0e0;
@@ -76,14 +14,23 @@
         align-items: center;
         justify-content: center;
         font-weight: 500;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.2s ease;
     }
-    
+    .btn-social:hover {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+        color: #333;
+        text-decoration: none;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
     .login-divider {
         text-align: center;
         margin: 1.5rem 0;
         position: relative;
     }
-    
     .login-divider:before {
         content: "";
         position: absolute;
@@ -93,7 +40,6 @@
         height: 1px;
         background-color: #e0e0e0;
     }
-    
     .login-divider span {
         position: relative;
         background-color: white;
@@ -101,4 +47,63 @@
         color: #757575;
     }
 </style>
+@endsection
+
+@section('content')
+<!-- Login Container -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header text-center">
+                    <h3>Masuk ke BuzzWire</h3>
+                </div>
+                <div class="card-body p-5">
+                    <div class="auth-welcome">
+                        Selamat datang kembali! Silakan masuk ke akun Anda.
+                    </div>
+                    <form class="auth-form" method="POST" action="{{ route('login') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <div class="position-relative">
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ old('email') }}" placeholder="Masukkan email Anda" required>
+                                <i class="fas fa-envelope input-icon"></i>
+                            </div>
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="form-label">Kata Sandi</label>
+                            <div class="position-relative">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="loginPassword" placeholder="Masukkan kata sandi Anda" required>
+                                <i class="fas fa-lock input-icon"></i>
+                                <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                                    <i class="fas fa-eye" id="loginPasswordIcon"></i>
+                                </button>
+                            </div>
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="remember-section">
+                            <div class="remember-me">
+                                <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                                <label class="form-check-label" for="remember">Ingat saya</label>
+                            </div>
+                            <div class="forgot-password">
+                                <a href="#" class="auth-link">Lupa kata sandi?</a>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-auth">Masuk</button>
+                    </form>
+                    <div class="auth-switch">
+                        Belum punya akun? <a href="#" class="auth-link" data-bs-toggle="modal" data-bs-target="#signupModal" data-bs-dismiss="modal">Daftar sekarang</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

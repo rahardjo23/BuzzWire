@@ -25,27 +25,56 @@ class ArticleController extends Controller
             ->orderBy('publish_time', 'desc')
             ->first();
         
-        // Ambil 3-4 artikel terbaru untuk sidebar (selain featured article)
+        // Ambil SEMUA artikel terbaru untuk sidebar (selain featured article)
+        // FIXED: Removed ->take(4) to show all published articles
         $latestArticles = Article::where('is_published', 1)
             ->with(['user', 'category'])
             ->when($featuredArticle, function($query) use ($featuredArticle) {
                 return $query->where('id', '!=', $featuredArticle->id);
             })
             ->orderBy('publish_time', 'desc')
-            ->take(4)
-            ->get();
+            ->get(); // Changed from ->take(4)->get() to ->get()
         
         return view('welcome', compact('featuredArticle', 'latestArticles'));
     }
 
-    public function index()
-    {
-        $articles = Article::where('is_published', 1)
-            ->orderBy('publish_time', 'desc')
-            ->paginate(10);
-        
-        return view('articles.index', compact('articles'));
+    public function trending(Request $request)
+{
+    $query = Article::where('is_published', 1)
+        ->with(['user', 'category']);
+    
+    // Filter by category if provided
+    if ($request->has('category') && $request->category) {
+        $categoryName = ucfirst($request->category);
+        $query->whereHas('category', function($q) use ($categoryName) {
+            $q->where('name', 'like', "%{$categoryName}%");
+        });
     }
+    
+    // Filter by time period if provided
+    if ($request->has('period') && $request->period) {
+        switch ($request->period) {
+            case 'week':
+                $query->where('created_at', '>=', now()->subWeek());
+                break;
+            case 'month':
+                $query->where('created_at', '>=', now()->subMonth());
+                break;
+            case 'year':
+                $query->where('created_at', '>=', now()->subYear());
+                break;
+            // 'all' or default = no time filter
+        }
+    }
+    
+    // Order by views (highest to lowest), then by publish time
+    $articles = $query->orderBy('views', 'desc')
+        ->orderBy('publish_time', 'desc')
+        ->paginate(15); // 15 articles per page
+    
+    return view('trending', compact('articles'));
+}
+    
 
     public function show(Article $article)
     {
@@ -258,27 +287,45 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-   /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Article $article)
-    {
-        // Check if the current user is the author
-        if ($article->user_id !== Auth::id()) {
-            abort(403, 'You are not authorized to delete this article.');
-        }
+    // Add this method to your ArticleController.php
 
+public function destroy(Article $article)
+{
+    // Check if the user owns the article
+    if (auth()->user()->id !== $article->user_id) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    try {
         // Delete the cover image if it exists
-        if ($article->cover_image) {
-            Storage::disk('public')->delete($article->cover_image);
+        if ($article->cover_image && Storage::exists('public/' . $article->cover_image)) {
+            Storage::delete('public/' . $article->cover_image);
         }
 
+        // Delete the article
         $article->delete();
 
-        // Redirect to profile instead of articles.index
+        // Redirect back to profile with success message
         return redirect()->route('profile')
-            ->with('success', 'Article deleted successfully!');
+            ->with('success', 'Article deleted successfully.');
+
+    } catch (\Exception $e) {
+        // If there's an error, redirect back with error message
+        return redirect()->route('profile')
+            ->with('error', 'Failed to delete article. Please try again.');
     }
+}
+
+// Also add this method if you don't have articles.index view
+public function index()
+{
+    $articles = Article::where('status', 'published')
+        ->with(['user', 'category'])
+        ->latest()
+        ->paginate(12);
+
+    return view('articles.index', compact('articles'));
+}
 
     /**
      * Publish an existing draft article.
@@ -301,15 +348,19 @@ class ArticleController extends Controller
     /**
      * Display articles by category.
      */
-    public function byCategory(Category $category)
-    {
-        $articles = Article::where('category_id', $category->id)
-            ->where('is_published', 1)
-            ->orderBy('publish_time', 'desc')
-            ->paginate(10);
-        
-        return view('articles.category', compact('articles', 'category'));
-    }
+    public function byCategory($categoryId)
+{
+    // Find category by ID
+    $category = Category::findOrFail($categoryId);
+    
+    $articles = Article::where('category_id', $category->id)
+        ->where('is_published', 1)
+        ->with(['user', 'category'])
+        ->orderBy('publish_time', 'desc')
+        ->paginate(10);
+    
+    return view('articles.category', compact('articles', 'category'));
+}
 
     /**
      * Mendapatkan daftar artikel milik user saat ini

@@ -235,18 +235,18 @@
         </div>
     </div>
 
-    <!-- Search Filters -->
+    <!-- Search Filters - FIXED -->
     <div class="search-filters">
         <h5 class="filter-title">
             <i class="bi bi-funnel me-2"></i>Filter Results
         </h5>
-        <form method="GET" action="{{ route('articles.search') }}" class="row g-3">
+        <form method="GET" action="{{ route('articles.search') }}" class="row g-3" id="searchFilterForm">
             <input type="hidden" name="q" value="{{ $query }}">
             
             <div class="col-md-4">
                 <label for="category" class="form-label">Category</label>
-                <select name="category" id="category" class="form-select" onchange="this.form.submit()">
-                    <option value="all" {{ request('category') == 'all' ? 'selected' : '' }}>All Categories</option>
+                <select name="category" id="category" class="form-select">
+                    <option value="all" {{ request('category') == 'all' || !request('category') ? 'selected' : '' }}>All Categories</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
                             {{ $cat->name }}
@@ -257,8 +257,8 @@
             
             <div class="col-md-4">
                 <label for="sort" class="form-label">Sort By</label>
-                <select name="sort" id="sort" class="form-select" onchange="this.form.submit()">
-                    <option value="relevance" {{ request('sort') == 'relevance' ? 'selected' : '' }}>Most Relevant</option>
+                <select name="sort" id="sort" class="form-select">
+                    <option value="relevance" {{ request('sort') == 'relevance' || !request('sort') ? 'selected' : '' }}>Most Relevant</option>
                     <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
                     <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest First</option>
                     <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>Most Popular</option>
@@ -355,4 +355,35 @@ function highlightSearchTerm($text, $term) {
     return $highlighted;
 }
 @endphp
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle category dropdown change
+    const categorySelect = document.getElementById('category');
+    const sortSelect = document.getElementById('sort');
+    
+    function submitSearchForm() {
+        // Get current form
+        const form = document.getElementById('searchFilterForm');
+        
+        // Make sure we're submitting to search route, not category route
+        form.action = "{{ route('articles.search') }}";
+        form.method = "GET";
+        
+        // Submit the form
+        form.submit();
+    }
+    
+    // Handle dropdown changes
+    if (categorySelect) {
+        categorySelect.addEventListener('change', submitSearchForm);
+    }
+    
+    if (sortSelect) {
+        sortSelect.addEventListener('change', submitSearchForm);
+    }
+});
+</script>
 @endsection

@@ -39,8 +39,50 @@ class CommentController extends Controller
     }
 
     /**
+     * Get comment data for editing (AJAX)
+     */
+    public function edit(Comment $comment)
+    {
+        // Pastikan user hanya bisa edit comment mereka sendiri
+        if ($comment->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        return response()->json([
+            'id' => $comment->id,
+            'content' => $comment->content
+        ]);
+    }
+
+    /**
+     * Update the specified comment in storage.
+     */
+    public function update(Request $request, Comment $comment)
+    {
+        // Pastikan user hanya bisa update comment mereka sendiri
+        if ($comment->user_id !== Auth::id()) {
+            return redirect()->back()->with('error', 'You can only edit your own comments.');
+        }
+
+        // Validasi input
+        $request->validate([
+            'content' => 'required|string|min:5|max:1000',
+        ], [
+            'content.required' => 'Comment content is required.',
+            'content.min' => 'Comment must be at least 5 characters long.',
+            'content.max' => 'Comment cannot exceed 1000 characters.',
+        ]);
+
+        // Update komentar
+        $comment->update([
+            'content' => $request->content
+        ]);
+
+        return redirect()->back()->with('success', 'Comment updated successfully!');
+    }
+
+    /**
      * Remove the specified comment from storage.
-     * (Optional - jika ingin user bisa hapus comment mereka sendiri)
      */
     public function destroy(Comment $comment)
     {

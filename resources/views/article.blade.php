@@ -21,7 +21,6 @@
         font-weight: bold;
         margin-bottom: 15px;
         color: #212121;
-        /* FIX: Prevent title overflow */
         word-wrap: break-word;
         overflow-wrap: break-word;
         hyphens: auto;
@@ -68,7 +67,7 @@
     }
     
     .article-content {
-        font-size: 18px;
+        font-size: 24px;
         line-height: 1.8;
         color: #333;
         word-wrap: break-word;
@@ -83,28 +82,6 @@
         max-width: 100%;
         border-radius: 8px;
         margin: 20px 0;
-    }
-    
-    .article-content blockquote {
-        border-left: 4px solid #f97316;
-        padding-left: 20px;
-        margin: 20px 0;
-        font-style: italic;
-        color: #555;
-    }
-    
-    .article-content h2 {
-        font-size: 28px;
-        margin-top: 40px;
-        margin-bottom: 20px;
-        color: #212121;
-    }
-    
-    .article-content h3 {
-        font-size: 24px;
-        margin-top: 30px;
-        margin-bottom: 15px;
-        color: #212121;
     }
 
     /* Comment Section Styles */
@@ -160,11 +137,6 @@
         color: white;
     }
 
-    .btn-comment:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-
     .comments-list h4 {
         margin-bottom: 1.5rem;
         color: #333;
@@ -188,7 +160,13 @@
     .comment-header {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         margin-bottom: 1rem;
+    }
+
+    .comment-user-section {
+        display: flex;
+        align-items: center;
     }
 
     .comment-avatar {
@@ -216,12 +194,97 @@
         margin: 0;
     }
 
+    .comment-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .comment-action-btn {
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 0.875rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .comment-action-btn:hover {
+        background-color: #f0f0f0;
+    }
+
+    .comment-action-btn.edit-btn:hover {
+        color: #1a73e8;
+    }
+
+    .comment-action-btn.delete-btn:hover {
+        color: #dc3545;
+    }
+
     .comment-content {
         color: #333;
         line-height: 1.6;
         font-size: 16px;
         word-wrap: break-word;
         overflow-wrap: break-word;
+    }
+
+    .comment-edit-form {
+        display: none;
+        margin-top: 1rem;
+    }
+
+    .comment-edit-form textarea {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        font-size: 16px;
+        min-height: 80px;
+        resize: vertical;
+    }
+
+    .comment-edit-form textarea:focus {
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+        outline: none;
+    }
+
+    .comment-edit-actions {
+        margin-top: 0.75rem;
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-save {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-save:hover {
+        background-color: #218838;
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-cancel:hover {
+        background-color: #5a6268;
     }
 
     .no-comments {
@@ -263,8 +326,200 @@
         text-decoration: underline;
     }
 
-    /* Responsive Design */
+    /* Simple Toast Notification - Centered */
+    .toast-notification {
+        position: fixed;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100px);
+        padding: 18px 25px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 500;
+        z-index: 9999;
+        min-width: 400px;
+        max-width: 600px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        text-align: center;
+        font-size: 15px;
+    }
+
+    .toast-notification.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+
+    .toast-notification.success {
+        background: linear-gradient(135deg, #28a745, #20c997);
+    }
+
+    .toast-notification.error {
+        background: linear-gradient(135deg, #dc3545, #fd7e14);
+    }
+
+    .toast-notification.info {
+        background: linear-gradient(135deg, #17a2b8, #6f42c1);
+    }
+
+    .toast-notification .toast-icon {
+        display: inline-block;
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .toast-notification .toast-close {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0;
+        opacity: 0.8;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .toast-notification .toast-close:hover {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Custom Delete Confirmation Modal */
+    .delete-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 10000;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .delete-modal-overlay.show {
+        display: flex;
+        opacity: 1;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .delete-modal {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        max-width: 450px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transform: scale(0.8);
+        transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        text-align: center;
+    }
+
+    .delete-modal-overlay.show .delete-modal {
+        transform: scale(1);
+    }
+
+    .delete-modal-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        background: linear-gradient(135deg, #ff6b6b, #ff5252);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 36px;
+    }
+
+    .delete-modal h3 {
+        color: #333;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .delete-modal p {
+        color: #666;
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 30px;
+    }
+
+    .delete-modal-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .delete-modal-btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 120px;
+    }
+
+    .delete-modal-btn.cancel {
+        background: #f8f9fa;
+        color: #666;
+        border: 2px solid #e0e0e0;
+    }
+
+    .delete-modal-btn.cancel:hover {
+        background: #e9ecef;
+        border-color: #ccc;
+    }
+
+    .delete-modal-btn.confirm {
+        background: linear-gradient(135deg, #ff6b6b, #ff5252);
+        color: white;
+        border: 2px solid transparent;
+    }
+
+    .delete-modal-btn.confirm:hover {
+        background: linear-gradient(135deg, #ff5252, #e53935);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+    }
+
+    /* Responsive toast */
     @media (max-width: 768px) {
+        .toast-notification {
+            min-width: 320px;
+            max-width: 90vw;
+            left: 50%;
+            margin: 0 20px;
+        }
+        
+        .delete-modal {
+            padding: 25px 20px;
+            margin: 20px;
+        }
+        
+        .delete-modal-actions {
+            flex-direction: column;
+        }
+        
+        .delete-modal-btn {
+            width: 100%;
+        }
+        
         .article-title {
             font-size: 28px;
         }
@@ -275,10 +530,6 @@
             gap: 10px;
         }
 
-        .article-content {
-            font-size: 16px;
-        }
-
         .comment-form {
             padding: 1rem;
         }
@@ -286,23 +537,44 @@
         .comment-item {
             padding: 1rem;
         }
+
+        .comment-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .comment-actions {
+            align-self: flex-end;
+        }
     }
 </style>
 @endsection
 
 @section('content')
 <div class="container mt-4">
+    <!-- Simple Toast Notifications -->
     @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="toast-notification success show" id="toast-notification">
+        <span class="toast-icon">✓</span>
         {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button class="toast-close" onclick="hideToast()">&times;</button>
     </div>
     @endif
 
     @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="toast-notification error show" id="toast-notification">
+        <span class="toast-icon">✕</span>
         {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button class="toast-close" onclick="hideToast()">&times;</button>
+    </div>
+    @endif
+
+    @if(session('info'))
+    <div class="toast-notification info show" id="toast-notification">
+        <span class="toast-icon">ℹ</span>
+        {{ session('info') }}
+        <button class="toast-close" onclick="hideToast()">&times;</button>
     </div>
     @endif
 
@@ -394,23 +666,81 @@
             
             @if($article->comments->count() > 0)
                 @foreach($article->comments->sortByDesc('created_at') as $comment)
-                    <div class="comment-item">
+                    <div class="comment-item" id="comment-{{ $comment->id }}">
                         <div class="comment-header">
-                            @if($comment->user->profile_image)
-                                <img src="{{ asset('storage/' . $comment->user->profile_image) }}" alt="{{ $comment->user->name }}" class="comment-avatar">
-                            @else
-                                <img src="{{ asset('img/image1.png') }}" alt="{{ $comment->user->name }}" class="comment-avatar">
-                            @endif
-                            <div class="comment-user-info">
-                                <p class="comment-username">{{ $comment->user->name }}</p>
-                                <p class="comment-date">
-                                    <i class="far fa-clock"></i>
-                                    {{ $comment->created_at->diffForHumans() }}
-                                </p>
+                            <div class="comment-user-section">
+                                @if($comment->user->profile_image)
+                                    <img src="{{ asset('storage/' . $comment->user->profile_image) }}" alt="{{ $comment->user->name }}" class="comment-avatar">
+                                @else
+                                    <img src="{{ asset('img/image1.png') }}" alt="{{ $comment->user->name }}" class="comment-avatar">
+                                @endif
+                                <div class="comment-user-info">
+                                    <p class="comment-username">{{ $comment->user->name }}</p>
+                                    <p class="comment-date">
+                                        <i class="far fa-clock"></i>
+                                        {{ $comment->created_at->diffForHumans() }}
+                                        @if($comment->created_at != $comment->updated_at)
+                                            <span class="text-muted">(edited)</span>
+                                        @endif
+                                    </p>
+                                </div>
                             </div>
+
+                            <!-- Action Buttons (Only for comment owner) -->
+                            @auth
+                            @if($comment->user_id === auth()->id())
+                            <div class="comment-actions">
+                                <button 
+                                    type="button"
+                                    class="comment-action-btn edit-btn"
+                                    onclick="editComment({{ $comment->id }})"
+                                >
+                                    <i class="far fa-edit"></i> Edit
+                                </button>
+                                <form action="{{ route('comments.destroy', $comment) }}" method="POST" class="d-inline" id="comment-delete-form-{{ $comment->id }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button 
+                                        type="button" 
+                                        class="comment-action-btn delete-btn"
+                                        onclick="showDeleteModal({{ $comment->id }})"
+                                    >
+                                        <i class="far fa-trash-alt"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                            @endif
+                            @endauth
                         </div>
-                        <div class="comment-content">
+
+                        <!-- Comment Content -->
+                        <div class="comment-content" id="comment-content-{{ $comment->id }}">
                             {{ $comment->content }}
+                        </div>
+
+                        <!-- Edit Form (Hidden by default) -->
+                        <div class="comment-edit-form" id="comment-edit-form-{{ $comment->id }}">
+                            <form action="{{ route('comments.update', $comment) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <textarea 
+                                    name="content" 
+                                    required
+                                    placeholder="Edit your comment..."
+                                >{{ $comment->content }}</textarea>
+                                <div class="comment-edit-actions">
+                                    <button type="submit" class="btn-save">
+                                        <i class="far fa-save"></i> Save
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        class="btn-cancel"
+                                        onclick="cancelEdit({{ $comment->id }})"
+                                    >
+                                        <i class="fas fa-times"></i> Cancel
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 @endforeach
@@ -423,4 +753,168 @@
         </div>
     </div>
 </div>
+
+<!-- Custom Delete Confirmation Modal -->
+<div class="delete-modal-overlay" id="deleteModal">
+    <div class="delete-modal">
+        <div class="delete-modal-icon">
+            <i class="far fa-trash-alt"></i>
+        </div>
+        <h3>Delete Comment</h3>
+        <p>Are you sure you want to delete this comment?<br>This action cannot be undone.</p>
+        <div class="delete-modal-actions">
+            <button type="button" class="delete-modal-btn cancel" onclick="hideDeleteModal()">
+                Cancel
+            </button>
+            <button type="button" class="delete-modal-btn confirm" onclick="confirmDeleteAction()">
+                Delete Comment
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Toast notification functions
+function hideToast() {
+    const toast = document.getElementById('toast-notification');
+    if (toast) {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }
+}
+
+// Auto hide toast after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const toast = document.getElementById('toast-notification');
+    if (toast) {
+        setTimeout(hideToast, 5000);
+    }
+});
+
+// Global variable to store the comment ID to be deleted
+let commentIdToDelete = null;
+
+// Show custom delete modal
+function showDeleteModal(commentId) {
+    // Store the comment ID
+    commentIdToDelete = commentId;
+    
+    console.log('Comment ID to delete:', commentId); // Debug
+    
+    // Show modal
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+// Hide delete modal
+function hideDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    commentIdToDelete = null;
+}
+
+// Confirm delete action
+function confirmDeleteAction() {
+    if (commentIdToDelete) {
+        const form = document.getElementById('comment-delete-form-' + commentIdToDelete);
+        
+        console.log('Comment ID:', commentIdToDelete); // Debug
+        console.log('Form found:', form); // Debug
+        
+        if (form) {
+            console.log('Form action:', form.action); // Debug
+            console.log('Form method:', form.method); // Debug
+            
+            // Show loading toast
+            showToast('Deleting comment...', 'info');
+            
+            // Hide modal
+            hideDeleteModal();
+            
+            // Submit form directly
+            console.log('Submitting form...'); // Debug
+            form.submit();
+        } else {
+            console.error('Form not found for comment ID:', commentIdToDelete); // Debug
+            showToast('Error: Form not found', 'error');
+        }
+    } else {
+        console.error('No comment ID to delete!'); // Debug
+        showToast('Error: No comment selected', 'error');
+    }
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('deleteModal');
+    if (event.target === modal) {
+        hideDeleteModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        hideDeleteModal();
+    }
+});
+
+// Comment edit functions
+function editComment(commentId) {
+    // Hide content, show edit form
+    document.getElementById('comment-content-' + commentId).style.display = 'none';
+    document.getElementById('comment-edit-form-' + commentId).style.display = 'block';
+}
+
+function cancelEdit(commentId) {
+    // Show content, hide edit form
+    document.getElementById('comment-content-' + commentId).style.display = 'block';
+    document.getElementById('comment-edit-form-' + commentId).style.display = 'none';
+}
+
+// Function to show custom toast (for dynamic notifications)
+function showToast(message, type = 'success') {
+    // Remove existing toast if any
+    const existingToast = document.getElementById('toast-notification');
+    if (existingToast) {
+        existingToast.classList.remove('show');
+        setTimeout(() => {
+            existingToast.remove();
+        }, 300);
+    }
+    
+    // Create new toast
+    const toast = document.createElement('div');
+    toast.id = 'toast-notification';
+    toast.className = `toast-notification ${type}`;
+    
+    let icon = '✓';
+    if (type === 'error') icon = '✕';
+    if (type === 'info') icon = 'ℹ';
+    
+    toast.innerHTML = `
+        <span class="toast-icon">${icon}</span>
+        ${message}
+        <button class="toast-close" onclick="hideToast()">&times;</button>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Show with animation
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    // Auto hide after 5 seconds
+    setTimeout(() => {
+        if (document.getElementById('toast-notification')) {
+            hideToast();
+        }
+    }, 5000);
+}
+</script>
 @endsection

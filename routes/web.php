@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\CommentController; // TAMBAHAN IMPORT
+use App\Http\Controllers\CommentController;
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -24,11 +24,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-drafts', [ProfileController::class, 'drafts'])->name('profile.drafts');
 });
 
+// Home Route - MOVED UP to avoid conflicts
+Route::get('/', [ArticleController::class, 'home'])->name('home');
+
 // Article Routes - Public
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/popular', [ArticleController::class, 'popular'])->name('articles.popular');
-Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/search', [ArticleController::class, 'search'])->name('articles.search');
+
+// API Routes for search suggestions
+Route::get('/api/search-suggestions', [ArticleController::class, 'searchSuggestions']);
 
 // Article Routes - Auth Required
 Route::middleware(['auth'])->group(function () {
@@ -37,60 +42,35 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
     Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
+    
+    // FIXED: Article delete route with proper redirect
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+    
     Route::post('/articles/{article}/publish', [ArticleController::class, 'publish'])->name('articles.publish');
     
     // User's Articles
     Route::get('/my-articles', [ArticleController::class, 'myArticles'])->name('articles.my');
     
-    // TAMBAHAN: Comment Routes
+    // Comment Routes - UPDATED with edit and update routes
     Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     
     // Admin Routes
     Route::get('/admin/ensure-categories', [ArticleController::class, 'ensureCategories'])->name('admin.ensure-categories');
 });
 
-// Category Routes
-Route::get('/category/{category}', [ArticleController::class, 'byCategory'])->name('category.show');
+// Category Routes - Dynamic Category Pages
+Route::get('/category/{category:id}', [ArticleController::class, 'byCategory'])->name('category.show');
 
-// Home Route
-Route::get('/', [ArticleController::class, 'home'])->name('home');
+// Individual Article Route - MOVED DOWN to avoid conflicts with other routes
+Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
+
+// Trending Articles Route
+Route::get('/trending', [ArticleController::class, 'trending'])->name('trending');
 
 // Test Route
 Route::get('/tes', function () {
     return view('tes');
 });
-
-// Static Category Pages
-Route::get('/politics', function () {
-    return view('politics');
-})->name('politics');
-
-Route::get('/technology', function () {
-    return view('technology');
-})->name('technology');
-
-Route::get('/health', function () {
-    return view('health');
-})->name('health');
-
-Route::get('/sports', function () {
-    return view('sports');
-})->name('sports');
-
-Route::get('/crime', function () {
-    return view('crime');
-})->name('crime');
-
-Route::get('/science', function () {
-    return view('science');
-})->name('science');
-
-Route::get('/economic', function () {
-    return view('economic');
-})->name('economic');
-
-Route::get('/travel', function () {
-    return view('travel');
-})->name('travel');
