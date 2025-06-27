@@ -135,7 +135,7 @@
         border-color: #212121;
     }
 
-    /* FIXED: Trending Article Cards - Remove Double Hover */
+    /* Trending Article Cards */
     .trending-article-card {
         background: white;
         border-radius: 12px;
@@ -146,13 +146,11 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
 
-    /* FIXED: Remove padding from card and apply to inner content */
     .trending-article-card:hover {
         transform: translateY(-6px);
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
     }
 
-    /* FIXED: Ensure article-link doesn't interfere with card styling */
     .trending-article-card .article-link {
         display: block;
         text-decoration: none;
@@ -209,7 +207,7 @@
         display: flex;
         align-items: flex-start;
         gap: 2rem;
-        padding: 2rem; /* Moved padding here */
+        padding: 2rem;
     }
 
     .trending-card-image {
@@ -343,6 +341,8 @@
 
         .trending-hero h1 {
             font-size: 2.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .trending-icon {
@@ -424,9 +424,9 @@
         <div class="trending-hero-content">
             <h1>
                 <span class="trending-icon">🔥</span>
-                Trending Articles
+                Trending Local Articles
             </h1>
-            <p>Discover the most popular and widely-read articles on BuzzWire, ranked by reader engagement and views</p>
+            <p>Discover the most popular and widely-read local articles on BuzzWire, ranked by reader engagement and views</p>
         </div>
     </div>
 </div>
@@ -458,7 +458,7 @@
     <div class="trending-filters">
         <div class="filter-buttons">
             <span style="font-weight: 600; color: #333; margin-right: 1rem;">Filter by:</span>
-            <a href="{{ route('trending') }}" class="filter-btn {{ !request('category') && !request('period') ? 'active' : '' }}">
+            <a href="{{ route('trending') }}" class="filter-btn {{ !request('period') && !request('category') ? 'active' : '' }}">
                 All Time
             </a>
             <a href="{{ route('trending', ['period' => 'week']) }}" class="filter-btn {{ request('period') == 'week' ? 'active' : '' }}">
@@ -467,19 +467,17 @@
             <a href="{{ route('trending', ['period' => 'month']) }}" class="filter-btn {{ request('period') == 'month' ? 'active' : '' }}">
                 This Month
             </a>
-            <a href="{{ route('trending', ['category' => 'politik']) }}" class="filter-btn {{ request('category') == 'politik' ? 'active' : '' }}">
-                Politik
-            </a>
-            <a href="{{ route('trending', ['category' => 'teknologi']) }}" class="filter-btn {{ request('category') == 'teknologi' ? 'active' : '' }}">
-                Teknologi
-            </a>
-            <a href="{{ route('trending', ['category' => 'olahraga']) }}" class="filter-btn {{ request('category') == 'olahraga' ? 'active' : '' }}">
-                Olahraga
-            </a>
+            @if($categories && $categories->count() > 0)
+                @foreach($categories->take(5) as $category)
+                <a href="{{ route('trending', ['category' => $category->id]) }}" class="filter-btn {{ request('category') == $category->id ? 'active' : '' }}">
+                    {{ $category->name }}
+                </a>
+                @endforeach
+            @endif
         </div>
     </div>
 
-    <!-- Trending Articles List -->
+    <!-- Trending Articles List - LOCAL ARTICLES ONLY -->
     @if($articles && $articles->count() > 0)
         @foreach($articles as $index => $article)
         <article class="trending-article-card">
@@ -532,18 +530,18 @@
         @endforeach
 
         <!-- Pagination -->
-        @if($articles instanceof \Illuminate\Pagination\LengthAwarePaginator)
         <div class="d-flex justify-content-center">
             {{ $articles->links() }}
         </div>
-        @endif
 
     @else
         <!-- No Articles -->
         <div class="text-center py-5">
-            <h3>No Trending Articles Found</h3>
-            <p class="text-muted">There are no published articles to display in the trending section yet.</p>
-            <a href="{{ route('home') }}" class="btn btn-primary">Back to Home</a>
+            <div class="trending-article-card" style="padding: 3rem; text-align: center;">
+                <h3>No Trending Articles Found</h3>
+                <p class="text-muted">There are no published local articles to display in the trending section yet.</p>
+                <a href="{{ route('home') }}" class="btn btn-primary">Back to Home</a>
+            </div>
         </div>
     @endif
 

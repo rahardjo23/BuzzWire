@@ -84,7 +84,114 @@
         margin: 20px 0;
     }
 
-    /* Comment Section Styles */
+    /* External Article Indicator */
+    .external-article-badge {
+        background: linear-gradient(45deg, #2196f3, #21cbf3);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+    }
+
+    .external-article-badge i {
+        margin-right: 8px;
+    }
+
+    .external-source-info {
+        background: #f8f9fa;
+        border: 2px solid #e3f2fd;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .external-source-info h6 {
+        color: #1976d2;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .external-source-link {
+        color: #1976d2;
+        text-decoration: none;
+        font-weight: 500;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    .external-source-link:hover {
+        border-bottom-color: #1976d2;
+    }
+
+    /* Related Articles Section */
+    .related-articles {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 25px;
+        margin-top: 40px;
+    }
+
+    .related-articles h4 {
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .related-articles h4 i {
+        margin-right: 10px;
+        color: #007bff;
+    }
+
+    .related-article-item {
+        display: flex;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .related-article-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .related-article-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        object-fit: cover;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .related-article-content h6 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        line-height: 1.3;
+    }
+
+    .related-article-meta {
+        font-size: 14px;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    /* Comment Section Styles - Keep existing */
     .comment-section {
         margin-top: 3rem;
         border-top: 1px solid #e0e0e0;
@@ -326,7 +433,7 @@
         text-decoration: underline;
     }
 
-    /* Simple Toast Notification - Centered */
+    /* Toast Notifications */
     .toast-notification {
         position: fixed;
         top: 30px;
@@ -498,7 +605,7 @@
         box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
     }
 
-    /* Responsive toast */
+    /* Responsive styles */
     @media (max-width: 768px) {
         .toast-notification {
             min-width: 320px;
@@ -547,13 +654,24 @@
         .comment-actions {
             align-self: flex-end;
         }
+
+        .related-article-item {
+            flex-direction: column;
+        }
+
+        .related-article-image {
+            width: 100%;
+            height: 120px;
+            margin-right: 0;
+            margin-bottom: 10px;
+        }
     }
 </style>
 @endsection
 
 @section('content')
 <div class="container mt-4">
-    <!-- Simple Toast Notifications -->
+    <!-- Toast Notifications -->
     @if(session('success'))
     <div class="toast-notification success show" id="toast-notification">
         <span class="toast-icon">✓</span>
@@ -579,6 +697,14 @@
     @endif
 
     <div class="article-container">
+        <!-- Check if this is an external/imported article -->
+        @if(Str::contains($article->content, 'imported from:') || Str::contains($article->content, 'external source'))
+        <div class="external-article-badge">
+            <i class="fas fa-external-link-alt"></i>
+            Artikel Eksternal
+        </div>
+        @endif
+
         <div class="article-header">
             <h1 class="article-title">{{ $article->title }}</h1>
             
@@ -612,6 +738,23 @@
                 </div>
             </div>
         </div>
+
+        <!-- External Source Info (if applicable) -->
+        @if(Str::contains($article->content, 'imported from:'))
+        @php
+            preg_match('/imported from: (https?:\/\/[^\s\n]+)/', $article->content, $matches);
+            $sourceUrl = $matches[1] ?? null;
+        @endphp
+        @if($sourceUrl)
+        <div class="external-source-info">
+            <h6><i class="fas fa-info-circle me-2"></i>Sumber Artikel</h6>
+            <p class="mb-2">Artikel ini diimpor dari sumber eksternal. Klik link di bawah untuk membaca artikel asli:</p>
+            <a href="{{ $sourceUrl }}" target="_blank" class="external-source-link">
+                <i class="fas fa-external-link-alt me-1"></i>Baca Artikel Asli
+            </a>
+        </div>
+        @endif
+        @endif
         
         @if($article->cover_image)
             <img src="{{ asset('storage/' . $article->cover_image) }}" alt="{{ $article->title }}" class="article-image">
@@ -621,6 +764,40 @@
             {!! $article->content !!}
         </div>
     </div>
+
+    <!-- Related Articles Section -->
+    @php
+        $relatedArticles = App\Models\Article::where('category_id', $article->category_id)
+            ->where('id', '!=', $article->id)
+            ->where('is_published', 1)
+            ->with(['user', 'category'])
+            ->orderBy('views', 'desc')
+            ->take(3)
+            ->get();
+    @endphp
+
+    @if($relatedArticles->count() > 0)
+    <div class="related-articles">
+        <h4><i class="fas fa-newspaper"></i>Artikel Terkait</h4>
+        @foreach($relatedArticles as $related)
+        <a href="{{ route('articles.show', $related) }}" class="related-article-item">
+            @if($related->cover_image)
+                <img src="{{ asset('storage/' . $related->cover_image) }}" alt="{{ $related->title }}" class="related-article-image">
+            @else
+                <img src="{{ asset('img/image1.png') }}" alt="{{ $related->title }}" class="related-article-image">
+            @endif
+            <div class="related-article-content">
+                <h6>{{ Str::limit($related->title, 80) }}</h6>
+                <div class="related-article-meta">
+                    <span><i class="far fa-user"></i> {{ $related->user->name }}</span>
+                    <span><i class="far fa-eye"></i> {{ number_format($related->views) }}</span>
+                    <span><i class="far fa-calendar"></i> {{ $related->created_at->diffForHumans() }}</span>
+                </div>
+            </div>
+        </a>
+        @endforeach
+    </div>
+    @endif
 
     <!-- Comment Section -->
     <div class="comment-section">
@@ -655,8 +832,8 @@
             <!-- Login Prompt -->
             <div class="login-prompt">
                 <p><i class="fas fa-sign-in-alt"></i> Want to join the conversation?</p>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a> or 
-                <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</a> to leave a comment.
+                <a href="{{ route('login') }}">Login</a> or 
+                <a href="{{ route('register') }}">Sign up</a> to leave a comment.
             </div>
         @endauth
 
@@ -798,12 +975,7 @@ let commentIdToDelete = null;
 
 // Show custom delete modal
 function showDeleteModal(commentId) {
-    // Store the comment ID
     commentIdToDelete = commentId;
-    
-    console.log('Comment ID to delete:', commentId); // Debug
-    
-    // Show modal
     const modal = document.getElementById('deleteModal');
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
@@ -822,28 +994,14 @@ function confirmDeleteAction() {
     if (commentIdToDelete) {
         const form = document.getElementById('comment-delete-form-' + commentIdToDelete);
         
-        console.log('Comment ID:', commentIdToDelete); // Debug
-        console.log('Form found:', form); // Debug
-        
         if (form) {
-            console.log('Form action:', form.action); // Debug
-            console.log('Form method:', form.method); // Debug
-            
-            // Show loading toast
             showToast('Deleting comment...', 'info');
-            
-            // Hide modal
             hideDeleteModal();
-            
-            // Submit form directly
-            console.log('Submitting form...'); // Debug
             form.submit();
         } else {
-            console.error('Form not found for comment ID:', commentIdToDelete); // Debug
             showToast('Error: Form not found', 'error');
         }
     } else {
-        console.error('No comment ID to delete!'); // Debug
         showToast('Error: No comment selected', 'error');
     }
 }
@@ -865,20 +1023,17 @@ document.addEventListener('keydown', function(event) {
 
 // Comment edit functions
 function editComment(commentId) {
-    // Hide content, show edit form
     document.getElementById('comment-content-' + commentId).style.display = 'none';
     document.getElementById('comment-edit-form-' + commentId).style.display = 'block';
 }
 
 function cancelEdit(commentId) {
-    // Show content, hide edit form
     document.getElementById('comment-content-' + commentId).style.display = 'block';
     document.getElementById('comment-edit-form-' + commentId).style.display = 'none';
 }
 
 // Function to show custom toast (for dynamic notifications)
 function showToast(message, type = 'success') {
-    // Remove existing toast if any
     const existingToast = document.getElementById('toast-notification');
     if (existingToast) {
         existingToast.classList.remove('show');
@@ -887,7 +1042,6 @@ function showToast(message, type = 'success') {
         }, 300);
     }
     
-    // Create new toast
     const toast = document.createElement('div');
     toast.id = 'toast-notification';
     toast.className = `toast-notification ${type}`;
@@ -904,12 +1058,10 @@ function showToast(message, type = 'success') {
     
     document.body.appendChild(toast);
     
-    // Show with animation
     setTimeout(() => {
         toast.classList.add('show');
     }, 100);
     
-    // Auto hide after 5 seconds
     setTimeout(() => {
         if (document.getElementById('toast-notification')) {
             hideToast();

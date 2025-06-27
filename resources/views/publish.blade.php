@@ -119,29 +119,35 @@
         color: #212121;
     }
 
-    .form-control {
-        border: 1px solid #ced4da;
-        border-radius: 8px;
-        padding: 12px;
-        transition: all 0.3s ease;
+    /* FIXED - Form controls dengan background putih */
+    .form-control,
+    .form-select,
+    .category-select {
+        background-color: #fff !important;
+        color: #212121 !important;
+        border: 1px solid #ced4da !important;
+        border-radius: 8px !important;
+        padding: 12px !important;
+        transition: all 0.3s ease !important;
     }
 
-    .form-control:focus {
-        border-color: #f97316;
-        box-shadow: 0 0 0 0.2rem rgba(249, 115, 22, 0.25);
+    .form-control:focus,
+    .form-select:focus,
+    .category-select:focus {
+        background-color: #fff !important;
+        color: #212121 !important;
+        border-color: #f97316 !important;
+        box-shadow: 0 0 0 0.2rem rgba(249, 115, 22, 0.25) !important;
+    }
+
+    .form-control::placeholder {
+        color: #6c757d !important;
     }
 
     .form-text {
         color: #6c757d;
         font-size: 14px;
         margin-top: 5px;
-    }
-
-    .category-select {
-        background-color: #fff;
-        border: 1px solid #ced4da;
-        border-radius: 8px;
-        padding: 12px;
     }
 
     .image-upload-container {
@@ -152,11 +158,12 @@
         margin-bottom: 20px;
         cursor: pointer;
         transition: all 0.3s ease;
+        background-color: #fff !important;
     }
 
     .image-upload-container:hover {
         border-color: #f97316;
-        background-color: rgba(249, 115, 22, 0.03);
+        background-color: rgba(249, 115, 22, 0.03) !important;
     }
 
     .image-icon {
@@ -169,6 +176,7 @@
         font-size: 18px;
         font-weight: 600;
         margin-bottom: 8px;
+        color: #212121;
     }
 
     .image-upload-text p {
@@ -196,25 +204,35 @@
     }
 
     .editor-button {
-        background-color: transparent;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        padding: 5px 10px;
-        font-size: 14px;
-        color: #495057;
-        transition: all 0.2s ease;
+        background-color: #fff !important;
+        color: #495057 !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 4px !important;
+        padding: 5px 10px !important;
+        font-size: 14px !important;
+        transition: all 0.2s ease !important;
     }
 
     .editor-button:hover {
-        background-color: #f1f3f5;
-        border-color: #ced4da;
+        background-color: #f1f3f5 !important;
+        border-color: #ced4da !important;
+        color: #212121 !important;
     }
 
     .editor-content {
-        border: 1px solid #ced4da;
-        border-radius: 0 0 8px 8px;
-        min-height: 300px;
-        padding: 15px;
+        background-color: #fff !important;
+        color: #212121 !important;
+        border: 1px solid #ced4da !important;
+        border-radius: 0 0 8px 8px !important;
+        min-height: 300px !important;
+        padding: 15px !important;
+    }
+
+    .editor-content:focus {
+        background-color: #fff !important;
+        color: #212121 !important;
+        border-color: #f97316 !important;
+        outline: none !important;
     }
 
     .publish-button {
@@ -234,20 +252,20 @@
     }
 
     .save-draft-button {
-        background-color: transparent;
-        color: #212121;
-        border: 1px solid #ced4da;
-        border-radius: 8px;
-        padding: 12px 24px;
-        font-size: 16px;
-        font-weight: 500;
-        transition: all 0.3s ease;
+        background-color: #fff !important;
+        color: #212121 !important;
+        border: 1px solid #ced4da !important;
+        border-radius: 8px !important;
+        padding: 12px 24px !important;
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
     }
 
     .save-draft-button:hover {
-        background-color: #f8f9fa;
-        color: #000;
-        border-color: #adb5bd;
+        background-color: #f8f9fa !important;
+        color: #000 !important;
+        border-color: #adb5bd !important;
     }
 
     .guidelines-container {

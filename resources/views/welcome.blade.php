@@ -3,9 +3,68 @@
 @section('title', 'BuzzWire News')
 
 @section('styles')
-
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 <style>
+    /* Clean Local Filter Section */
+    .filter-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-section .form-label {
+        font-weight: 600;
+        color: white;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .filter-section .form-select,
+    .filter-section .form-control {
+        border-radius: 8px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .filter-section .form-select:focus,
+    .filter-section .form-control:focus {
+        border-color: #ffd700;
+        box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        background: white;
+    }
+
+    .filter-section .btn-primary {
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        border: none;
+        color: #333;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 10px 24px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+
+    .filter-section .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        background: linear-gradient(45deg, #ffed4e, #ffd700);
+    }
+
+    .filter-stats {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+        backdrop-filter: blur(10px);
+    }
+
+    .filter-stats small {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
     /* Article Styles - Keep existing */
     .side-article-content h2 {
         word-wrap: break-word;
@@ -39,21 +98,6 @@
     .side-article-content {
         min-width: 0;
         overflow: hidden;
-    }
-
-    @media (max-width: 768px) {
-        .main-article h1 {
-            font-size: 1.5rem;
-        }
-        
-        .side-article-content h2 {
-            font-size: 1.1rem;
-        }
-
-        .side-article-image {
-            width: 100px !important;
-            height: 100px !important;
-        }
     }
 
     .trending-grid {
@@ -103,11 +147,12 @@
         border-radius: 12px;
         overflow: hidden;
         transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     .trending-grid .article-link:hover .trending-card {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
 
     .trending-image {
@@ -118,7 +163,7 @@
     }
 
     .trending-grid .article-link:hover .trending-image {
-        transform: scale(1.02);
+        transform: scale(1.05);
     }
 
     .trending-content {
@@ -137,32 +182,24 @@
         color: #212121;
     }
 
+    /* Hero spotlight and other existing styles */
     .hero-spotlight {
         background-color: #fff;
         border-radius: 12px;
         overflow: hidden;
         margin-bottom: 30px;
-        transition: all 0.3s ease;
-    }
-
-    .hero-spotlight:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
 
     .hero-spotlight-image {
         width: 100%;
         height: 400px;
         object-fit: cover;
-        transition: all 0.3s ease;
-    }
-
-    .hero-spotlight:hover .hero-spotlight-image {
-        transform: scale(1.02);
+        border-radius: 12px 12px 0 0;
     }
 
     .hero-spotlight-content {
         padding: 30px;
+        border-radius: 0 0 12px 12px;
     }
 
     .hero-spotlight-title {
@@ -224,7 +261,7 @@
         transition: all 0.3s ease;
     }
 
-    .featured-spotlight:hover {
+    .article-link:hover .featured-spotlight {
         transform: translateY(-3px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
@@ -236,7 +273,7 @@
         transition: all 0.3s ease;
     }
 
-    .featured-spotlight:hover .featured-spotlight-image {
+    .article-link:hover .featured-spotlight-image {
         transform: scale(1.02);
     }
 
@@ -275,7 +312,29 @@
         color: rgba(255, 255, 255, 0.8);
     }
 
+    /* Mobile responsiveness */
     @media (max-width: 768px) {
+        .main-article h1 {
+            font-size: 1.5rem;
+        }
+        
+        .side-article-content h2 {
+            font-size: 1.1rem;
+        }
+
+        .side-article-image {
+            width: 100px !important;
+            height: 100px !important;
+        }
+        
+        .filter-section .row > div {
+            margin-bottom: 15px;
+        }
+        
+        .filter-section .btn-primary {
+            width: 100%;
+        }
+        
         .hero-spotlight-title {
             font-size: 24px;
         }
@@ -312,6 +371,9 @@
 @endsection
 
 @section('content')
+
+
+
 <div class="container">
     <div class="row">
         <!-- Main Article -->
@@ -341,7 +403,7 @@
                     </div>
                 </a>
             @else
-                <a href="#" class="article-link">
+                <div class="article-link">
                     <div class="author-info">
                         <img src="{{ asset('img/image1.png') }}" alt="BuzzWire" class="author-avatar">
                         <div>
@@ -354,32 +416,35 @@
                         <h1>Welcome to BuzzWire News</h1>
                         <div class="category-tag1">News</div>
                         <img src="{{ asset('img/image1.png') }}" alt="Welcome" class="article-image">
+                        <p class="mt-3 text-muted">
+                            Selamat datang di BuzzWire News! Platform berita lokal terpercaya.
+                        </p>
                     </div>
-                </a>
+                </div>
             @endif
         </div>
 
-        <!-- Side Articles -->
+        <!-- Side Articles - LOCAL ONLY -->
         <div class="col-lg-6">
-            @if($latestArticles && $latestArticles->count() > 0)
+            @if($latestArticles->count() > 0)
                 @foreach($latestArticles->take(4) as $article)
-                <a href="{{ route('articles.show', $article) }}" class="side-article-link">
-                    <div class="side-article-content">
-                        <h2>{{ $article->title }}</h2>
-                        <div class="article-summary">{{ Str::limit(strip_tags($article->content), 100) }}</div>
-                        <div class="category-tag">{{ $article->category->name ?? 'News' }}</div>
-                        <span class="read-more-indicator">→</span>
-                    </div>
-                    @if($article->cover_image)
-                        <img src="{{ asset('storage/' . $article->cover_image) }}" alt="{{ $article->title }}" class="side-article-image">
-                    @else
-                        <img src="{{ asset('img/image1.png') }}" alt="{{ $article->title }}" class="side-article-image">
-                    @endif
-                </a>
+                    <a href="{{ route('articles.show', $article) }}" class="side-article-link">
+                        <div class="side-article-content">
+                            <h2>{{ $article->title }}</h2>
+                            <div class="article-summary">{{ Str::limit(strip_tags($article->content), 100) }}</div>
+                            <div class="category-tag">{{ $article->category->name ?? 'News' }}</div>
+                            <span class="read-more-indicator">→</span>
+                        </div>
+                        @if($article->cover_image)
+                            <img src="{{ asset('storage/' . $article->cover_image) }}" alt="{{ $article->title }}" class="side-article-image">
+                        @else
+                            <img src="{{ asset('img/image1.png') }}" alt="{{ $article->title }}" class="side-article-image">
+                        @endif
+                    </a>
                 @endforeach
             @else
                 @for($i = 1; $i <= 4; $i++)
-                <a href="#" class="side-article-link">
+                <div class="side-article-link">
                     <div class="side-article-content">
                         <h2>No Articles Available</h2>
                         <div class="article-summary">Start writing your first article to see it appear here...</div>
@@ -387,49 +452,49 @@
                         <span class="read-more-indicator">→</span>
                     </div>
                     <img src="{{ asset('img/image1.png') }}" alt="No Content" class="side-article-image">
-                </a>
+                </div>
                 @endfor
             @endif
         </div>
     </div>
 </div>
 
-<!-- Trending Articles Section -->
+<!-- Trending Local Articles Section -->
 <div class="container article-section-last">
     <div class="section-header">
-        <h2 class="section-title">Trending Stories</h2>
+        <h2 class="section-title">🏠 Trending Berita Lokal</h2>
         <a href="{{ route('trending') }}" class="show-more">View All <span class="show-more-icon">→</span></a>
     </div>
     
     <div class="trending-grid">
-        @if($latestArticles && $latestArticles->count() > 0)
-            @foreach($latestArticles->take(4) as $article)
-            <a href="{{ route('articles.show', $article) }}" class="article-link trending-link">
-                <div class="trending-card">
-                    @if($article->cover_image)
-                        <img src="{{ asset('storage/' . $article->cover_image) }}" alt="{{ $article->title }}" class="trending-image">
-                    @else
-                        <img src="{{ asset('img/image1.png') }}" alt="{{ $article->title }}" class="trending-image">
-                    @endif
-                    <div class="trending-content">
-                        <div class="category-tag">{{ $article->category->name ?? 'News' }}</div>
-                        <h3 class="trending-title">{{ $article->title }}</h3>
-                        <div class="article-summary">{{ Str::limit(strip_tags($article->content), 120) }}</div>
-                        <div class="author-small">
-                            @if($article->user->profile_image)
-                                <img src="{{ asset('storage/' . $article->user->profile_image) }}" alt="{{ $article->user->name }}" class="author-avatar-small">
-                            @else
-                                <img src="{{ asset('img/image1.png') }}" alt="{{ $article->user->name }}" class="author-avatar-small">
-                            @endif
-                            <span class="author-name-small">{{ $article->user->name }}</span>
+        @if($latestArticles->count() > 0)
+            @foreach($latestArticles->take(8) as $article)
+                <a href="{{ route('articles.show', $article) }}" class="article-link trending-link">
+                    <div class="trending-card">
+                        @if($article->cover_image)
+                            <img src="{{ asset('storage/' . $article->cover_image) }}" alt="{{ $article->title }}" class="trending-image">
+                        @else
+                            <img src="{{ asset('img/image1.png') }}" alt="{{ $article->title }}" class="trending-image">
+                        @endif
+                        <div class="trending-content">
+                            <div class="category-tag">{{ $article->category->name ?? 'News' }}</div>
+                            <h3 class="trending-title">{{ $article->title }}</h3>
+                            <div class="article-summary">{{ Str::limit(strip_tags($article->content), 120) }}</div>
+                            <div class="author-small">
+                                @if($article->user->profile_image)
+                                    <img src="{{ asset('storage/' . $article->user->profile_image) }}" alt="{{ $article->user->name }}" class="author-avatar-small">
+                                @else
+                                    <img src="{{ asset('img/image1.png') }}" alt="{{ $article->user->name }}" class="author-avatar-small">
+                                @endif
+                                <span class="author-name-small">{{ $article->user->name }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
             @endforeach
         @else
             @for($i = 1; $i <= 4; $i++)
-            <a href="#" class="article-link trending-link">
+            <div class="article-link trending-link">
                 <div class="trending-card">
                     <img src="{{ asset('img/image1.png') }}" alt="No Content" class="trending-image">
                     <div class="trending-content">
@@ -442,7 +507,7 @@
                         </div>
                     </div>
                 </div>
-            </a>
+            </div>
             @endfor
         @endif
     </div>
@@ -451,7 +516,7 @@
 <!-- Featured Spotlight Section -->
 <div class="container article-section-last">
     <div class="section-header">
-        <h2 class="section-title">Editor's Pick</h2>
+        <h2 class="section-title">⭐ Editor's Pick</h2>
         <a href="#" class="show-more">Read More <span class="show-more-icon">→</span></a>
     </div>
     
@@ -485,12 +550,12 @@
                 </div>
             @else
                 <div class="featured-spotlight">
-                    <a href="#" class="article-link" style="padding: 0; background: transparent; border-radius: 12px; overflow: hidden; display: block; height: 100%;">
+                    <div class="article-link" style="padding: 0; background: transparent; border-radius: 12px; overflow: hidden; display: block; height: 100%;">
                         <img src="{{ asset('img/image1.png') }}" alt="Welcome" class="featured-spotlight-image">
                         <div class="featured-spotlight-overlay">
                             <div class="category-tag1">News</div>
                             <h2 class="featured-spotlight-title">Welcome to BuzzWire News</h2>
-                            <div class="article-summary">Your trusted source for the latest news and updates.</div>
+                            <div class="article-summary">Platform berita lokal terpercaya dengan konten berkualitas.</div>
                             <div class="author-info">
                                 <img src="{{ asset('img/image1.png') }}" alt="BuzzWire" class="author-avatar">
                                 <div>
@@ -499,7 +564,7 @@
                                 </div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             @endif
         </div>
@@ -523,7 +588,7 @@
                 @endforeach
             @else
                 @for($i = 1; $i <= 3; $i++)
-                <a href="#" class="side-article-link compact-list-item">
+                <div class="side-article-link compact-list-item">
                     <img src="{{ asset('img/image1.png') }}" alt="No Content" class="compact-image">
                     <div class="side-article-content">
                         <h3 class="compact-title">No Articles Available</h3>
@@ -531,7 +596,7 @@
                         <div class="category-tag">News</div>
                         <span class="read-more-indicator">→</span>
                     </div>
-                </a>
+                </div>
                 @endfor
             @endif
         </div>
@@ -541,12 +606,12 @@
 <!-- Latest Updates Section -->
 <div class="container article-section-last">
     <div class="section-header">
-        <h2 class="section-title">Latest Updates</h2>
+        <h2 class="section-title">📰 Latest Local Updates</h2>
         <a href="#" class="show-more">See All <span class="show-more-icon">→</span></a>
     </div>
     
     <div class="row">
-        @if($latestArticles && $latestArticles->count() > 0)
+        @if($latestArticles->count() > 0)
             @foreach($latestArticles->take(6) as $article)
             <div class="col-lg-4 col-md-6">
                 <a href="{{ route('articles.show', $article) }}" class="article-link">
@@ -576,7 +641,7 @@
         @else
             @for($i = 1; $i <= 6; $i++)
             <div class="col-lg-4 col-md-6">
-                <a href="#" class="article-link">
+                <div class="article-link">
                     <div class="latest-article">
                         <img src="{{ asset('img/image1.png') }}" alt="No Content" class="latest-image">
                         <div class="author-small">
@@ -589,7 +654,7 @@
                             <span class="read-more">Read Article</span>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
             @endfor
         @endif
@@ -599,7 +664,7 @@
 <!-- Hero Spotlight Section -->
 <div class="container article-section-last">
     <div class="section-header">
-        <h2 class="section-title">Must Read</h2>
+        <h2 class="section-title">🎯 Must Read Local</h2>
         <a href="#" class="show-more">Explore <span class="show-more-icon">→</span></a>
     </div>
     
@@ -630,7 +695,7 @@
             </div>
         </a>
     @else
-        <a href="#" class="article-link">
+        <div class="article-link">
             <div class="hero-spotlight">
                 <img src="{{ asset('img/image1.png') }}" alt="Welcome" class="hero-spotlight-image">
                 <div class="hero-spotlight-content">
@@ -643,15 +708,22 @@
                     </div>
                     <h2 class="hero-spotlight-title">Welcome to BuzzWire News</h2>
                     <div class="category-tag1">News</div>
-                    <div class="article-summary">Your trusted source for the latest news and updates from around the world.</div>
+                    <div class="article-summary">Platform berita lokal terpercaya dengan konten berkualitas tinggi.</div>
                 </div>
             </div>
-        </a>
+        </div>
     @endif
 </div>
 
 @endsection
 
 @section('scripts')
-<!-- Tidak ada script tambahan karena semua script modal sudah ada di app.blade.php -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit filter form when category changes
+    document.getElementById('category').addEventListener('change', function() {
+        this.closest('form').submit();
+    });
+});
+</script>
 @endsection

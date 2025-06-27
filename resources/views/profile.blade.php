@@ -537,6 +537,7 @@
         color: var(--text-primary);
         margin-bottom: 0.5rem;
     }
+    
 
     .delete-modal p {
         color: var(--text-secondary);
@@ -601,6 +602,10 @@
         transition: all 0.2s ease;
         flex: 1;
     }
+
+    .delete-modal .modal-content {
+    background-color: #ffffff; /* Set modal content background color to white */
+}
 
     .btn-cancel:hover {
         background: var(--border-gray);
@@ -940,7 +945,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Delete Article</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="delete-icon">

@@ -92,9 +92,7 @@
                                 <input type="checkbox" class="form-check-input" id="remember" name="remember">
                                 <label class="form-check-label" for="remember">Ingat saya</label>
                             </div>
-                            <div class="forgot-password">
-                                <a href="#" class="auth-link">Lupa kata sandi?</a>
-                            </div>
+                            
                         </div>
                         <button type="submit" class="btn btn-auth">Masuk</button>
                     </form>

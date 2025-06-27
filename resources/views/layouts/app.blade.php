@@ -359,92 +359,9 @@
     @yield('styles')
 </head>
 <body>
-    <!-- Simple Clean Navbar -->
-    <!-- Updated Navbar Section for layouts/app.blade.php -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-        <!-- Logo -->
-        <a class="navbar-brand" href="/">BuzzWire</a>
-
-        <!-- Toggler/collapsible Button -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Navbar Content -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            
-            <!-- Centered Search Box -->
-            <div class="mx-auto">
-                <form action="{{ route('articles.search') }}" method="GET" class="search-form">
-                    <div class="input-group search-box">
-                        <input 
-                            type="text" 
-                            name="q"
-                            id="searchInput"
-                            class="form-control search-input" 
-                            placeholder="Search articles..."
-                            value="{{ request('q') }}"
-                        >
-                        <button class="btn search-btn" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                    
-                    <!-- Search Suggestions -->
-                    <div class="search-suggestions" id="searchSuggestions" style="display: none;">
-                        <div class="suggestions-list"></div>
-                    </div>
-                </form>
-            </div>
-
-            <!-- User Menu Only (Remove Write Button) -->
-            <div class="d-flex align-items-center ms-auto">
-                <div class="dropdown">
-                    <button class="btn dropdown-toggle d-flex align-items-center user-menu-button" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                        @auth
-                            <img src="{{ Auth::user()->profile_image_url }}" alt="{{ Auth::user()->name }}" class="user-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div class="user-avatar" style="width: 32px; height: 32px; background-color: #f97316; border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
-                                {{ Auth::user()->initials }}
-                            </div>
-                            <span class="text-white ms-2">{{ Auth::user()->username }}</span>
-                        @else
-                            <div class="user-avatar" style="width: 32px; height: 32px; background-color: #ccc; border-radius: 50%;"></div>
-                            <span class="text-white ms-2">Login</span>
-                        @endauth
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        @auth
-                            <li><a class="dropdown-item" href="{{ route('profile') }}">
-                                <i class="bi bi-person me-2"></i>Profile
-                            </a></li>
-                            <li><a class="dropdown-item" href="{{ route('articles.create') }}">
-                                <i class="bi bi-plus-circle me-2"></i>Write Article
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">
-                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
-                                    </button>
-                                </form>
-                            </li>
-                        @else
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-                                <i class="bi bi-box-arrow-in-right me-2"></i>Login
-                            </a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#signupModal">
-                                <i class="bi bi-person-plus me-2"></i>Sign Up
-                            </a></li>
-                        @endauth
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</nav>
+   
+<!-- Include Footer Component -->
+    @include('components.navbar')
     
     <!-- Include Categories Component -->
     @include('components.categories')
@@ -456,103 +373,8 @@
     
     <!-- Simple Clean Footer -->
     <!-- Updated Footer Section for layouts/app.blade.php -->
-<footer class="simple-footer">
-    <div class="container">
-        <div class="row">
-            <!-- Brand Section -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="footer-brand">
-                    <h3 class="brand-name">BuzzWire</h3>
-                    <p class="brand-description">
-                        Your trusted source for breaking news and compelling stories from around the world.
-                    </p>
-                    <div class="social-links">
-                        <a href="#" class="social-link">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Categories - First Column -->
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                <div class="footer-section">
-                    <h4 class="section-title">Categories</h4>
-                    <ul class="footer-links">
-                        @php
-                            $footerCategories = App\Models\Category::orderBy('id', 'asc')->take(4)->get();
-                        @endphp
-                        @foreach($footerCategories as $category)
-                            <li><a href="{{ route('category.show', $category->id) }}">{{ $category->name }}</a></li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Categories - Second Column -->
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                <div class="footer-section">
-                    <h4 class="section-title">More News</h4>
-                    <ul class="footer-links">
-                        @php
-                            $moreCategories = App\Models\Category::orderBy('id', 'asc')->skip(4)->take(4)->get();
-                        @endphp
-                        @foreach($moreCategories as $category)
-                            <li><a href="{{ route('category.show', $category->id) }}">{{ $category->name }}</a></li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Quick Links -->
-            <div class="col-lg-2 col-md-6 col-sm-6 mb-4">
-                <div class="footer-section">
-                    <h4 class="section-title">Quick Links</h4>
-                    <ul class="footer-links">
-                        <li><a href="{{ route('home') }}">Home</a></li>
-                        <li><a href="{{ route('articles.index') }}">All Articles</a></li>
-                        <li><a href="{{ route('trending') }}">Trending</a></li>
-                        @auth
-                            <li><a href="{{ route('articles.create') }}">Write</a></li>
-                            <li><a href="{{ route('profile') }}">Profile</a></li>
-                        @else
-                            <li><a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-                        @endauth
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer Bottom -->
-    <div class="footer-bottom">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="copyright">
-                        &copy; 2025 BuzzWire. All rights reserved.
-                    </p>
-                </div>
-                <div class="col-md-6">
-                    <div class="footer-bottom-links">
-                        <a href="#">Privacy</a>
-                        <a href="#">Terms</a>
-                        <a href="#">Contact</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+ <!-- Include Footer Component -->
+    @include('components.footer')
 
 @guest
 <!-- Login Modal - Simple Dark Theme -->
@@ -598,15 +420,7 @@
             @enderror
           </div>
           
-          <div class="remember-section">
-            <div class="remember-me">
-              <input type="checkbox" class="form-check-input" id="remember" name="remember">
-              <label class="form-check-label" for="remember">Ingat saya</label>
-            </div>
-            <div class="forgot-password">
-              <a href="#" class="auth-link">Lupa kata sandi?</a>
-            </div>
-          </div>
+          
           
           <button type="submit" class="btn btn-auth">Masuk</button>
         </form>
