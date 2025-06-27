@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class Article extends Model
@@ -33,6 +34,49 @@ class Article extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Boot method to auto-generate slug
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($article) {
+            if (empty($article->slug)) {
+                $article->slug = static::generateUniqueSlug($article->title);
+            }
+        });
+        
+        static::updating(function ($article) {
+            if ($article->isDirty('title') && empty($article->slug)) {
+                $article->slug = static::generateUniqueSlug($article->title);
+            }
+        });
+    }
+
+    /**
+     * Generate unique slug
+     */
+    private static function generateUniqueSlug($title)
+    {
+        $slug = Str::slug($title);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        // Limit slug length to avoid database issues
+        if (strlen($slug) > 200) {
+            $slug = substr($slug, 0, 200);
+            $originalSlug = $slug;
+        }
+
+        while (static::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
 
     /**
      * Relationship with User
@@ -141,4 +185,6 @@ class Article extends Model
             return $this->created_at;
         }
     }
+
+    
 }

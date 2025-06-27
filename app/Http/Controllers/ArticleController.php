@@ -9,42 +9,148 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
     /**
-     * Display the home page with featured and latest articles
-     * TAMBAHAN METHOD HOME YANG HILANG
+     * Display the home page with LOCAL articles ONLY
      */
-    public function home()
+    public function home(Request $request)
     {
-        // Ambil artikel featured (artikel terbaru yang dipublish)
-        $featuredArticle = Article::where('is_published', 1)
-            ->with(['user', 'category'])
-            ->orderBy('publish_time', 'desc')
-            ->first();
+        // Get filter parameters for local articles only
+        $categoryId = $request->get('category');
+        $search = $request->get('search');
+
+        // Get categories for filter
+        $categories = Category::orderBy('name')->get();
+
+        // --- HANYA BERITA LOKAL ---
+        $featuredArticle = null;
+        $latestArticles = collect();
+
+        $query = Article::where('is_published', 1)
+            ->with(['user', 'category']);
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        $featuredArticle = $query->orderBy('publish_time', 'desc')->first();
         
-        // Ambil 3-4 artikel terbaru untuk sidebar (selain featured article)
         $latestArticles = Article::where('is_published', 1)
             ->with(['user', 'category'])
             ->when($featuredArticle, function($query) use ($featuredArticle) {
                 return $query->where('id', '!=', $featuredArticle->id);
             })
+            ->when($categoryId, function($query) use ($categoryId) {
+                return $query->where('category_id', $categoryId);
+            })
+            ->when($search, function($query) use ($search) {
+                return $query->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('content', 'like', "%{$search}%");
+                });
+            })
             ->orderBy('publish_time', 'desc')
-            ->take(4)
             ->get();
-        
-        return view('welcome', compact('featuredArticle', 'latestArticles'));
+
+        return view('welcome', compact('featuredArticle', 'latestArticles', 'categories'));
     }
 
-    public function index()
+    /**
+     * Display LOCAL news ONLY (Dedicated page) - Replaces external news
+     */
+    public function localNews(Request $request)
     {
-        $articles = Article::where('is_published', 1)
+        $categoryId = $request->get('category');
+        $search = $request->get('search');
+
+        // Get categories for filter
+        $categories = Category::orderBy('name')->get();
+
+        // Build query for local articles
+        $query = Article::where('is_published', 1)
+            ->with(['user', 'category']);
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        $localArticles = $query->orderBy('publish_time', 'desc')->paginate(12);
+
+        return view('local-news', compact('localArticles', 'categories'));
+    }
+
+    /**
+     * Get trending news - LOCAL ARTICLES ONLY
+     */
+    public function trending(Request $request)
+    {
+        $categoryId = $request->get('category');
+        $period = $request->get('period', 'all');
+        $search = $request->get('search');
+
+        // Get categories for filter
+        $categories = Category::orderBy('name')->get();
+
+        // Build query for local articles only
+        $query = Article::where('is_published', 1)
+            ->with(['user', 'category']);
+
+        // Apply category filter
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        // Apply search filter
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply time period filter
+        switch ($period) {
+            case 'day':
+                $query->where('created_at', '>=', now()->subDay());
+                break;
+            case 'week':
+                $query->where('created_at', '>=', now()->subWeek());
+                break;
+            case 'month':
+                $query->where('created_at', '>=', now()->subMonth());
+                break;
+            case 'year':
+                $query->where('created_at', '>=', now()->subYear());
+                break;
+            default:
+                // 'all' - no time filter
+                break;
+        }
+
+        // Get articles ordered by views (trending) then by publish time
+        $articles = $query->orderBy('views', 'desc')
             ->orderBy('publish_time', 'desc')
-            ->paginate(10);
-        
-        return view('articles.index', compact('articles'));
+            ->paginate(15);
+
+        return view('trending', compact('articles', 'categories', 'period', 'categoryId', 'search'));
     }
 
     public function show(Article $article)
@@ -65,7 +171,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Method tambahan untuk membuat kategori dengan ID tetap
+     * Method untuk membuat kategori dengan ID tetap
      */
     private function createCategoriesWithFixedIds()
     {
@@ -97,7 +203,7 @@ class ArticleController extends Controller
             ]);
         }
         
-        \Log::info('Kategori telah dibuat dengan ID tetap');
+        Log::info('Kategori telah dibuat dengan ID tetap');
     }
 
     /**
@@ -126,9 +232,9 @@ class ArticleController extends Controller
         $categories = Category::orderBy('id', 'asc')->get();
         
         // Debug info untuk membantu troubleshooting
-        \Log::info('Categories loaded for publish form: ' . $categories->count());
+        Log::info('Categories loaded for publish form: ' . $categories->count());
         foreach ($categories as $category) {
-            \Log::info("Category ID: {$category->id}, Name: {$category->name}");
+            Log::info("Category ID: {$category->id}, Name: {$category->name}");
         }
         
         return view('publish', compact('categories'));
@@ -258,26 +364,42 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-   /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Article $article)
     {
-        // Check if the current user is the author
-        if ($article->user_id !== Auth::id()) {
-            abort(403, 'You are not authorized to delete this article.');
+        // Check if the user owns the article
+        if (auth()->user()->id !== $article->user_id) {
+            abort(403, 'Unauthorized action.');
         }
 
-        // Delete the cover image if it exists
-        if ($article->cover_image) {
-            Storage::disk('public')->delete($article->cover_image);
+        try {
+            // Delete the cover image if it exists
+            if ($article->cover_image && Storage::exists('public/' . $article->cover_image)) {
+                Storage::delete('public/' . $article->cover_image);
+            }
+
+            // Delete the article
+            $article->delete();
+
+            // Redirect back to profile with success message
+            return redirect()->route('profile')
+                ->with('success', 'Article deleted successfully.');
+
+        } catch (\Exception $e) {
+            // If there's an error, redirect back with error message
+            return redirect()->route('profile')
+                ->with('error', 'Failed to delete article. Please try again.');
         }
+    }
 
-        $article->delete();
+    // Also add this method if you don't have articles.index view
+    public function index()
+    {
+        $articles = Article::where('is_published', 1)
+            ->with(['user', 'category'])
+            ->latest('publish_time')
+            ->paginate(12);
 
-        // Redirect to profile instead of articles.index
-        return redirect()->route('profile')
-            ->with('success', 'Article deleted successfully!');
+        return view('articles.index', compact('articles'));
     }
 
     /**
@@ -301,10 +423,14 @@ class ArticleController extends Controller
     /**
      * Display articles by category.
      */
-    public function byCategory(Category $category)
+    public function byCategory($categoryId)
     {
+        // Find category by ID
+        $category = Category::findOrFail($categoryId);
+        
         $articles = Article::where('category_id', $category->id)
             ->where('is_published', 1)
+            ->with(['user', 'category'])
             ->orderBy('publish_time', 'desc')
             ->paginate(10);
         
@@ -417,5 +543,148 @@ class ArticleController extends Controller
             });
             
         return response()->json($suggestions);
+    }
+
+    /**
+     * Advanced search with filters and sorting
+     */
+    public function advancedSearch(Request $request)
+    {
+        $query = $request->input('q');
+        $category = $request->input('category');
+        $dateFrom = $request->input('date_from');
+        $dateTo = $request->input('date_to');
+        $author = $request->input('author');
+        $sort = $request->input('sort', 'relevance');
+        $perPage = $request->input('per_page', 12);
+        
+        $articlesQuery = Article::where('is_published', 1)
+            ->with(['user', 'category']);
+            
+        // Text search
+        if ($query) {
+            $articlesQuery->where(function($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('content', 'like', "%{$query}%");
+            });
+        }
+        
+        // Category filter
+        if ($category && $category !== 'all') {
+            $articlesQuery->where('category_id', $category);
+        }
+        
+        // Date range filter
+        if ($dateFrom) {
+            $articlesQuery->where('publish_time', '>=', Carbon::parse($dateFrom));
+        }
+        if ($dateTo) {
+            $articlesQuery->where('publish_time', '<=', Carbon::parse($dateTo)->endOfDay());
+        }
+        
+        // Author filter
+        if ($author) {
+            $articlesQuery->whereHas('user', function($q) use ($author) {
+                $q->where('name', 'like', "%{$author}%");
+            });
+        }
+        
+        // Apply sorting
+        switch ($sort) {
+            case 'newest':
+                $articlesQuery->orderBy('publish_time', 'desc');
+                break;
+            case 'oldest':
+                $articlesQuery->orderBy('publish_time', 'asc');
+                break;
+            case 'popular':
+                $articlesQuery->orderBy('views', 'desc');
+                break;
+            case 'title_az':
+                $articlesQuery->orderBy('title', 'asc');
+                break;
+            case 'title_za':
+                $articlesQuery->orderBy('title', 'desc');
+                break;
+            default: // relevance
+                $articlesQuery->orderBy('publish_time', 'desc');
+                break;
+        }
+        
+        $articles = $articlesQuery->paginate($perPage);
+        $categories = Category::orderBy('name')->get();
+        
+        return view('articles.advanced-search', compact(
+            'articles', 'query', 'categories', 'category', 'dateFrom', 
+            'dateTo', 'author', 'sort', 'perPage'
+        ));
+    }
+
+    /**
+     * Get article analytics data
+     */
+    public function analytics(Article $article)
+    {
+        // Check if the current user is the author
+        if ($article->user_id !== Auth::id()) {
+            abort(403, 'You are not authorized to view analytics for this article.');
+        }
+
+        // Simple analytics data - you can expand this
+        $analytics = [
+            'total_views' => $article->views ?? 0,
+            'comments_count' => $article->comments()->count(),
+            'publish_date' => $article->publish_time,
+            'days_since_published' => $article->publish_time ? 
+                Carbon::parse($article->publish_time)->diffInDays(now()) : 0,
+            'category' => $article->category->name ?? 'Uncategorized',
+            'word_count' => str_word_count(strip_tags($article->content)),
+            'reading_time' => ceil(str_word_count(strip_tags($article->content)) / 200), // Assuming 200 words per minute
+        ];
+
+        return view('articles.analytics', compact('article', 'analytics'));
+    }
+
+    /**
+     * Duplicate an existing article (useful for templates)
+     */
+    public function duplicate(Article $article)
+    {
+        // Check if the current user is the author
+        if ($article->user_id !== Auth::id()) {
+            abort(403, 'You are not authorized to duplicate this article.');
+        }
+
+        $newArticle = $article->replicate();
+        $newArticle->title = 'Copy of ' . $article->title;
+        $newArticle->is_published = false;
+        $newArticle->publish_time = null;
+        $newArticle->views = 0;
+        $newArticle->created_at = now();
+        $newArticle->updated_at = now();
+        
+        $newArticle->save();
+
+        return redirect()->route('articles.edit', $newArticle)
+            ->with('success', 'Article duplicated successfully! You can now edit and publish it.');
+    }
+
+    /**
+     * Archive/unarchive article
+     */
+    public function toggleArchive(Article $article)
+    {
+        // Check if the current user is the author
+        if ($article->user_id !== Auth::id()) {
+            abort(403, 'You are not authorized to archive this article.');
+        }
+
+        $article->is_archived = !($article->is_archived ?? false);
+        $article->save();
+
+        $status = $article->is_archived ? 'archived' : 'unarchived';
+        
+        return redirect()->back()
+            ->with('success', "Article has been {$status} successfully.");
     }
 }

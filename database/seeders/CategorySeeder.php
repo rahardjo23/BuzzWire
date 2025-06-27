@@ -10,21 +10,20 @@ class CategorySeeder extends Seeder
 {
     public function run()
     {
+        // NewsAPI Compatible Categories
         $categories = [
-            'Politik' => 'Berita dan analisis tentang peristiwa dan kebijakan politik',
-            'Teknologi' => 'Berita teknologi terbaru, ulasan, dan inovasi',
-            'Kesehatan' => 'Berita medis, tips kesehatan, dan penelitian kesehatan',
-            'Olahraga' => 'Berita olahraga, hasil, dan analisis',
-            'Kriminal' => 'Berita kriminal, investigasi, dan proses hukum',
-            'Sains' => 'Penemuan ilmiah, penelitian, dan inovasi',
-            'Ekonomi' => 'Berita bisnis dan ekonomi, analisis pasar',
-            'Wisata' => 'Destinasi wisata, tips, dan pengalaman perjalanan',
+            'Business' => 'Business and economic news, market analysis, and financial updates',
+            'Entertainment' => 'Entertainment news, celebrity updates, lifestyle, and travel content',
+            'General' => 'General news, politics, crime, and current affairs',
+            'Health' => 'Health and medical news, wellness tips, and health research',
+            'Science' => 'Scientific discoveries, research, and innovations',
+            'Sports' => 'Sports news, results, competitions, and athletic events',
+            'Technology' => 'Latest technology news, reviews, and digital innovations',
         ];
 
         foreach ($categories as $name => $description) {
             Category::create([
                 'name' => $name,
-                'slug' => Str::slug($name),
                 'description' => $description,
             ]);
         }
